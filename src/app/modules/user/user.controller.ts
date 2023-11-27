@@ -145,13 +145,9 @@ const updateASpecificUser = async (req: Request, res: Response) => {
 };
 
 const deleteASpecificUser = async (req: Request, res: Response) => {
-  // console.log(req.body);
-
   try {
     const userId = req.params.userId;
     await UserServices.deleteASpecificUserFromDb(Number(userId));
-
-    // const re = _.omit(result, 'password');
 
     res.status(200).json({
       success: true,
@@ -177,21 +173,9 @@ const addNewProduct = async (req: Request, res: Response) => {
 
     await UserServices.addNewProductToOrders(Number(userId), zodParsedData);
 
-    // const data = {
-    //   ...result,
-    //   fullName: {
-    //     firstName: result?.fullName.firstName,
-    //     lastName: result?.fullName.lastName,
-    //   },
-    //   address: {
-    //     street: result?.address?.street,
-    //     city: result?.address?.city,
-    //     country: result?.address?.country,
-    //   },
-    // };
     res.status(200).json({
       success: true,
-      message: 'User fetched successfully!',
+      message: 'Order created successfully!',
       data: null,
     });
   } catch (err: any) {

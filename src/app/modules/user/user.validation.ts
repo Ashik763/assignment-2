@@ -27,7 +27,6 @@ const userValidationSchema = z.object({
   isActive: z.boolean(),
   hobbies: z.array(z.string()),
   address: addressValidationSchema,
-  //   orders: z.array(orderValidationSchema),
 });
 
 const userUpdateValidationSchema = z.object({
@@ -60,7 +59,6 @@ const userUpdateValidationSchema = z.object({
     })
     .optional(),
   orders: z.array(z.custom()).optional(),
-  //   orders: z.array(orderValidationSchema),
 });
 const orderValidationSchema = z.object({
   productName: z.string(),

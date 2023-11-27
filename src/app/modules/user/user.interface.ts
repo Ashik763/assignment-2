@@ -1,10 +1,7 @@
-// import { Model } from 'mongoose';
-
 import { Model } from 'mongoose';
 
 export type TFullName = {
   firstName: string;
-  // middleName: string;
   lastName: string;
 };
 
@@ -14,11 +11,6 @@ export type TAddress = {
   country: string;
 };
 
-// export type TOrders = {
-//   street: string;
-//   city: string;
-//   country: string;
-// };
 export type TOrder = {
   productName: string;
   price: number;
@@ -36,11 +28,6 @@ export type TUser = {
   hobbies: string[];
   address: TAddress;
   orders?: TOrder[] | [];
-  // orders: {
-  //   productName: string;
-  //   price: number;
-  //   quantity: number;
-  // }[];
 };
 export type TUpdateUser = {
   userId?: number;
@@ -59,11 +46,6 @@ export type TUpdateUser = {
     city?: string;
     country?: string;
   };
-  // orders: {
-  //   productName: string;
-  //   price: number;
-  //   quantity: number;
-  // }[];
 };
 
 //for creating static
@@ -71,15 +53,3 @@ export type TUpdateUser = {
 export interface UserModel extends Model<TUser> {
   doesUserExist(id: number): Promise<TUser | null>;
 }
-
-// for creating instance
-
-// export interface UserMethods {
-//   doesUserExist(id: number): Promise<TUser | null>;
-// }
-
-// export interface UserMethods {
-//   doesUserExist(id: number): Promise<TUser | null>;
-// }
-
-// export type UserModel = Model<TUser, Record<string, never>, UserMethods>;

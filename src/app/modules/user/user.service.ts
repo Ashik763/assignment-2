@@ -119,7 +119,6 @@ const updateASpecificUserFromDb = async (userId: number, data: TUpdateUser) => {
 };
 
 const deleteASpecificUserFromDb = async (userId: number) => {
-  // console.log(await User.doesUserExist(userId));
   if (await User.doesUserExist(userId)) {
     const result = await User.deleteOne({ userId: userId });
 
@@ -130,8 +129,6 @@ const deleteASpecificUserFromDb = async (userId: number) => {
 };
 
 const addNewProductToOrders = async (userId: number, data: TOrder) => {
-  // let result: TUser;
-
   try {
     if (await User.doesUserExist(userId)) {
       // await User.updateOne({ userId: userId }, { $push: { orders: data } });
@@ -151,35 +148,44 @@ const addNewProductToOrders = async (userId: number, data: TOrder) => {
 };
 
 const getUserOrdersFromDb = async (userId: number) => {
-  const result = await User.find({ userId: userId }).select({
-    orders: 1,
-    _id: 0,
-  });
+  if (await User.doesUserExist(userId)) {
+    const result = await User.find({ userId: userId }).select({
+      orders: 1,
+      _id: 0,
+    });
+    return result;
+  } else {
+    throw new Error('User not found');
+  }
+
   // .select('-password')
   // .select({ __v: 0 })
   // .select({ _id: 0 })
   // .select({ 'fullName._id': 0 });
-
-  return result;
 };
+
 const getTotalPriceFromDb = async (userId: number) => {
-  const result = User.aggregate([
-    { $match: { userId: userId } },
-    { $unwind: '$orders' },
-    {
-      $group: {
-        _id: '$_id',
-        totalPrice: {
-          $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
+  if (await User.doesUserExist(userId)) {
+    const result = User.aggregate([
+      { $match: { userId: userId } },
+      { $unwind: '$orders' },
+      {
+        $group: {
+          _id: '$_id',
+          totalPrice: {
+            $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
+          },
         },
       },
-    },
-    {
-      $project: { totalPrice: 1, _id: 0 },
-    },
-  ]);
+      {
+        $project: { totalPrice: 1, _id: 0 },
+      },
+    ]);
 
-  return result;
+    return result;
+  } else {
+    throw new Error('User not found');
+  }
 };
 
 export const UserServices = {
