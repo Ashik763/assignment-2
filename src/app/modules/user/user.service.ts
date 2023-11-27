@@ -15,7 +15,7 @@ const createUserIntoDB = async (userData: TUser) => {
 };
 const getUserFromDB = async () => {
   const result = await User.find()
-    .select({ userId: 0, isActive: 0, hobbies: 0, 'address._id': 0 })
+    .select({ userId: 0, isActive: 0, hobbies: 0, 'address._id': 0, orders: 0 })
     .select('-password')
     .select({ __v: 0 })
     .select({ _id: 0 })
@@ -25,10 +25,9 @@ const getUserFromDB = async () => {
 };
 
 const getASpecificUserFromDb = async (userId: number) => {
-  // console.log(await User.doesUserExist(userId));
   if (await User.doesUserExist(userId)) {
     const result = await User.findOne({ userId: userId })
-      .select({ 'address._id': 0 })
+      .select({ 'address._id': 0, orders: 0 })
       .select('-password')
       .select({ __v: 0 })
       .select({ _id: 0 })
@@ -40,11 +39,10 @@ const getASpecificUserFromDb = async (userId: number) => {
 };
 
 const updateASpecificUserFromDb = async (userId: number, data: TUpdateUser) => {
-  // let result: TUser;
   try {
     if (await User.doesUserExist(userId)) {
       const user = await User.findOne({ userId: userId });
-      // .then((user) => {
+
       if (user) {
         if (data.userId) {
           user.userId = data.userId;
@@ -108,11 +106,12 @@ const updateASpecificUserFromDb = async (userId: number, data: TUpdateUser) => {
           address,
         };
       } else {
-        throw new Error('Something is wrong!');
+        throw new Error('User not found!');
       }
-      // })
     } else {
-      throw new Error('User not found!');
+      throw new Error(
+        'User exists! But you need to put unique value to some fields',
+      );
     }
   } catch (err) {
     throw new Error('User not found!');

@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
-// import userValidationSchema from './user.validation';
+
 import { UserServices } from './user.service';
-import _ from 'lodash';
+
 import { validation } from './user.validation';
-// import { StudentServices } from './student.service';
-// import studentValidationSchema from './student.validation';
 
 const createUser = async (req: Request, res: Response) => {
   // console.log(req.body);
@@ -16,16 +14,43 @@ const createUser = async (req: Request, res: Response) => {
     const zodParsedData = validation.userValidationSchema.parse(userData);
 
     const result = await UserServices.createUserIntoDB(zodParsedData);
-    // const {userId,username,fullName,age,email,isActive,hobbies,address} = result;
+
+    const {
+      userId,
+      username,
+
+      age,
+      email,
+      isActive,
+      hobbies,
+    } = result;
+
+    const data = {
+      userId,
+      username,
+      fullName: {
+        firstName: result?.fullName.firstName,
+        lastName: result?.fullName.lastName,
+      },
+      age,
+      email,
+      isActive,
+      hobbies,
+
+      address: {
+        street: result?.address?.street,
+        city: result?.address?.city,
+        country: result?.address?.country,
+      },
+    };
 
     // const { password, __v, ...obj } = result;
     // console.log(obj);
-    const re = _.omit(result, 'password');
 
     res.status(200).json({
       success: true,
-      message: 'User is created succesfully',
-      data: re,
+      message: 'User  created succesfully',
+      data: data,
     });
   } catch (err: any) {
     res.status(500).json({
@@ -35,17 +60,14 @@ const createUser = async (req: Request, res: Response) => {
     });
   }
 };
-const getAllUsers = async (req: Request, res: Response) => {
-  // console.log(req.body);
 
+const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await UserServices.getUserFromDB();
 
-    // const re = _.omit(result, 'password');
-
     res.status(200).json({
       success: true,
-      message: 'User is created succesfully',
+      message: 'Users fetched succesfully!',
       data: result,
     });
   } catch (err: any) {
@@ -107,7 +129,7 @@ const updateASpecificUser = async (req: Request, res: Response) => {
     };
     res.status(200).json({
       success: true,
-      message: 'User fetched successfully!',
+      message: 'User updated successfully!',
       data: data,
     });
   } catch (err: any) {
