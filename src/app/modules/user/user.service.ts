@@ -150,20 +150,38 @@ const addNewProductToOrders = async (userId: number, data: TOrder) => {
     throw new Error('User not found!');
   }
 };
-// const getAllStudentsFromDB = async () => {
-//   const result = await Student.find();
-//   return result;
-// };
 
-// const getSingleStudentFromDB = async (id: string) => {
-//   const result = await Student.aggregate([{ $match: { id } }]);
-//   return result;
-// };
+const getUserOrdersFromDb = async (userId: number) => {
+  const result = await User.find({ userId: userId }).select({
+    orders: 1,
+    _id: 0,
+  });
+  // .select('-password')
+  // .select({ __v: 0 })
+  // .select({ _id: 0 })
+  // .select({ 'fullName._id': 0 });
 
-// const deleteStudentFromDB = async (id: string) => {
-//   const result = await Student.updateOne({ id }, { isDeleted: true });
-//   return result;
-// };
+  return result;
+};
+const getTotalPriceFromDb = async (userId: number) => {
+  const result = User.aggregate([
+    { $match: { userId: userId } },
+    { $unwind: '$orders' },
+    {
+      $group: {
+        _id: '$_id',
+        totalPrice: {
+          $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
+        },
+      },
+    },
+    {
+      $project: { totalPrice: 1, _id: 0 },
+    },
+  ]);
+
+  return result;
+};
 
 export const UserServices = {
   createUserIntoDB,
@@ -172,4 +190,6 @@ export const UserServices = {
   updateASpecificUserFromDb,
   deleteASpecificUserFromDb,
   addNewProductToOrders,
+  getUserOrdersFromDb,
+  getTotalPriceFromDb,
 };

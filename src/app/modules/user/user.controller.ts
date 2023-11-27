@@ -184,6 +184,63 @@ const addNewProduct = async (req: Request, res: Response) => {
   }
 };
 
+const getUserOrders = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+
+    const result = await UserServices.getUserOrdersFromDb(Number(userId));
+
+    // const data = {
+    //   ...result,
+    //   fullName: {
+    //     firstName: result?.fullName.firstName,
+    //     lastName: result?.fullName.lastName,
+    //   },
+    //   address: {
+    //     street: result?.address?.street,
+    //     city: result?.address?.city,
+    //     country: result?.address?.country,
+    //   },
+    // };
+    res.status(200).json({
+      success: true,
+      message: 'Order fetched successfully!',
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(404).json({
+      success: false,
+      message: err.message || 'User not found',
+      error: {
+        code: 404,
+        description: err.message || 'User not found',
+      },
+    });
+  }
+};
+const getTotalPrice = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+
+    const result = await UserServices.getTotalPriceFromDb(Number(userId));
+
+    res.status(200).json({
+      success: true,
+      message: 'Total price calculated successfully!',
+      data: result[0],
+    });
+  } catch (err: any) {
+    res.status(404).json({
+      success: false,
+      message: err.message || 'User not found',
+      error: {
+        code: 404,
+        description: err.message || 'User not found',
+      },
+    });
+  }
+};
+
 export const UserControllers = {
   createUser,
   getAllUsers,
@@ -191,4 +248,6 @@ export const UserControllers = {
   updateASpecificUser,
   deleteASpecificUser,
   addNewProduct,
+  getUserOrders,
+  getTotalPrice,
 };
