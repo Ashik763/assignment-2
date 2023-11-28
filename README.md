@@ -11,3 +11,5 @@ NODE_DEV
 BCRYPT_SALT_ROUNDS ).<br>
 3. Then take a look at the **package.json** file to see the commands.
 
+
+Live link: https://assignment-2-blush.vercel.app/api/users
