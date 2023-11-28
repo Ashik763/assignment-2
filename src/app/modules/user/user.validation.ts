@@ -11,12 +11,6 @@ const addressValidationSchema = z.object({
   country: z.string(),
 });
 
-// const orderValidationSchema = z.object({
-//   productName: z.string(),
-//   price: z.number(),
-//   quantity: z.number(),
-// });
-
 const userValidationSchema = z.object({
   userId: z.number(),
   username: z.string(),
@@ -64,7 +58,6 @@ const orderValidationSchema = z.object({
   productName: z.string(),
   price: z.number(),
   quantity: z.number(),
-  //   orders: z.array(orderValidationSchema),
 });
 
 export const validation = {

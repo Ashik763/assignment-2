@@ -6,11 +6,9 @@ import { UserServices } from './user.service';
 import { validation } from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
-  // console.log(req.body);
-
   try {
     const userData = req.body;
-    // console.log(userData);
+
     const zodParsedData = validation.userValidationSchema.parse(userData);
 
     const result = await UserServices.createUserIntoDB(zodParsedData);
@@ -43,9 +41,6 @@ const createUser = async (req: Request, res: Response) => {
         country: result?.address?.country,
       },
     };
-
-    // const { password, __v, ...obj } = result;
-    // console.log(obj);
 
     res.status(200).json({
       success: true,
@@ -80,13 +75,9 @@ const getAllUsers = async (req: Request, res: Response) => {
 };
 
 const getASpecificUser = async (req: Request, res: Response) => {
-  // console.log(req.body);
-
   try {
     const userId = req.params.userId;
     const result = await UserServices.getASpecificUserFromDb(Number(userId));
-
-    // const re = _.omit(result, 'password');
 
     res.status(200).json({
       success: true,
@@ -196,18 +187,6 @@ const getUserOrders = async (req: Request, res: Response) => {
 
     const result = await UserServices.getUserOrdersFromDb(Number(userId));
 
-    // const data = {
-    //   ...result,
-    //   fullName: {
-    //     firstName: result?.fullName.firstName,
-    //     lastName: result?.fullName.lastName,
-    //   },
-    //   address: {
-    //     street: result?.address?.street,
-    //     city: result?.address?.city,
-    //     country: result?.address?.country,
-    //   },
-    // };
     res.status(200).json({
       success: true,
       message: 'Order fetched successfully!',

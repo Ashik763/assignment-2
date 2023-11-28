@@ -1,14 +1,7 @@
-// import { TStudent } from './student.interface';
-// import { Student } from './student.model';
-
 import { TOrder, TUpdateUser, TUser } from './user.interface';
 import { User } from './user.model';
 
 const createUserIntoDB = async (userData: TUser) => {
-  // if (await User.isUserExists(userData.id)) {
-  //   throw new Error('User already exists!');
-  // }
-  // console.log(userData);
   const result = await User.create(userData);
 
   return result;
@@ -131,8 +124,6 @@ const deleteASpecificUserFromDb = async (userId: number) => {
 const addNewProductToOrders = async (userId: number, data: TOrder) => {
   try {
     if (await User.doesUserExist(userId)) {
-      // await User.updateOne({ userId: userId }, { $push: { orders: data } });
-
       const result = await User.findOneAndUpdate(
         { userId: userId },
         { $push: { orders: data } },
@@ -157,11 +148,6 @@ const getUserOrdersFromDb = async (userId: number) => {
   } else {
     throw new Error('User not found');
   }
-
-  // .select('-password')
-  // .select({ __v: 0 })
-  // .select({ _id: 0 })
-  // .select({ 'fullName._id': 0 });
 };
 
 const getTotalPriceFromDb = async (userId: number) => {
