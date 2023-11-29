@@ -9,7 +9,7 @@ const createUserIntoDB = async (userData: TUser) => {
 const getUserFromDB = async () => {
   const result = await User.find()
     .select({ userId: 0, isActive: 0, hobbies: 0, 'address._id': 0, orders: 0 })
-    .select('-password')
+    .select('-password') // excluding password from output
     .select({ __v: 0 })
     .select({ _id: 0 })
     .select({ 'fullName._id': 0 });

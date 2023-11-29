@@ -107,6 +107,7 @@ const userSchema = new Schema<TUser, UserModel>({
   orders: [orderSchema],
 });
 
+// hashing password
 userSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
@@ -123,6 +124,7 @@ userSchema.post('save', function (doc, next) {
   next();
 });
 
+// static method to check user existence
 userSchema.statics.doesUserExist = async function (id: number) {
   const existingUser = await User.findOne({ userId: id });
 
